@@ -1,16 +1,17 @@
-# ZeroEQ - ゼロレイテンシー・ブロードキャスト用リミッター
+# Sculpt - 11-Band Precision Equalizer with Realtime Spectrum Analyzer
 # JUCE + WebView（Vite/React/MUI）構成
 
 cmake_minimum_required(VERSION 3.22)
 
 # macOS の最小対応バージョンを明示
 if(APPLE)
+    set(SCULPT_MIN_MACOS "10.15")
     set(ZEROEQ_MIN_MACOS "10.15")
     if(NOT CMAKE_OSX_DEPLOYMENT_TARGET)
-        set(CMAKE_OSX_DEPLOYMENT_TARGET "${ZEROEQ_MIN_MACOS}" CACHE STRING "Minimum supported macOS version" FORCE)
-    elseif(CMAKE_OSX_DEPLOYMENT_TARGET VERSION_GREATER ZEROEQ_MIN_MACOS)
-        message(STATUS "Overriding CMAKE_OSX_DEPLOYMENT_TARGET (${CMAKE_OSX_DEPLOYMENT_TARGET}) -> ${ZEROEQ_MIN_MACOS}")
-        set(CMAKE_OSX_DEPLOYMENT_TARGET "${ZEROEQ_MIN_MACOS}" CACHE STRING "Minimum supported macOS version" FORCE)
+        set(CMAKE_OSX_DEPLOYMENT_TARGET "${SCULPT_MIN_MACOS}" CACHE STRING "Minimum supported macOS version" FORCE)
+    elseif(CMAKE_OSX_DEPLOYMENT_TARGET VERSION_GREATER SCULPT_MIN_MACOS)
+        message(STATUS "Overriding CMAKE_OSX_DEPLOYMENT_TARGET (${CMAKE_OSX_DEPLOYMENT_TARGET}) -> ${SCULPT_MIN_MACOS}")
+        set(CMAKE_OSX_DEPLOYMENT_TARGET "${SCULPT_MIN_MACOS}" CACHE STRING "Minimum supported macOS version" FORCE)
     endif()
     message(STATUS "macOS deployment target: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
 endif()
@@ -19,7 +20,7 @@ endif()
 include(${CMAKE_SOURCE_DIR}/cmake/Version.cmake)
 
 # プロジェクト定義
-project(ZeroEQ VERSION ${PROJECT_VERSION})
+project(Sculpt VERSION ${PROJECT_VERSION})
 
 # C++17標準を使用
 set(CMAKE_CXX_STANDARD 17)
@@ -114,7 +115,7 @@ if(WIN32)
 endif()
 
 message(STATUS "")
-message(STATUS "ZeroEQ Configuration:")
+message(STATUS "Sculpt Configuration:")
 message(STATUS "  Version: ${PROJECT_VERSION}")
 message(STATUS "  Build Type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "  C++ Standard: ${CMAKE_CXX_STANDARD}")
@@ -128,8 +129,8 @@ else()
 endif()
 message(STATUS "")
 message(STATUS "Available targets:")
-message(STATUS "  ZeroEQ          - Build the main plugin")
-message(STATUS "  webui_install      - Install WebUI dependencies")
-message(STATUS "  webui_dev          - Start WebUI development server")
-message(STATUS "  webui_build        - Build WebUI for production")
+message(STATUS "  Sculpt          - Build the main plugin")
+message(STATUS "  webui_install   - Install WebUI dependencies")
+message(STATUS "  webui_dev       - Start WebUI development server")
+message(STATUS "  webui_build     - Build WebUI for production")
 message(STATUS "")

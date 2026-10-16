@@ -238,13 +238,13 @@ ZeroEQAudioProcessorEditor::ZeroEQAudioProcessorEditor(ZeroEQAudioProcessor& p)
                   .withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
                   .withWinWebView2Options(
                       juce::WebBrowserComponent::Options::WinWebView2{}
-                          .withBackgroundColour(juce::Colour(0xFF202428))
+                          .withBackgroundColour(juce::Colour(0xFF141721))
                           .withUserDataFolder(juce::File::getSpecialLocation(
                               juce::File::SpecialLocationType::tempDirectory)))
                   .withWebViewLifetimeListener(&webViewLifetimeGuard)
                   .withNativeIntegrationEnabled()
-                  .withInitialisationData("vendor", "ZeroEQ")
-                  .withInitialisationData("pluginName", "ZeroEQ")
+                  .withInitialisationData("vendor", "scobru")
+                  .withInitialisationData("pluginName", "Sculpt")
                   .withInitialisationData("pluginVersion", ZEROEQ_VERSION_STRING)
                   .withOptionsFrom(controlParameterIndexReceiver)
                   .withOptionsFrom(webBypassRelay)
@@ -427,7 +427,7 @@ ZeroEQAudioProcessorEditor::~ZeroEQAudioProcessorEditor()
 
 void ZeroEQAudioProcessorEditor::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colour(0xFF202428));
+    g.fillAll(juce::Colour(0xFF141721));
 }
 
 void ZeroEQAudioProcessorEditor::resized()

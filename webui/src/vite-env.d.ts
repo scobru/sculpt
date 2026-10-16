@@ -12,3 +12,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+declare module '@mui/icons-material/*' {
+  import { SvgIconComponent } from '@mui/material';
+  const Component: SvgIconComponent;
+  export default Component;
+}

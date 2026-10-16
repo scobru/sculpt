@@ -234,12 +234,32 @@ export const HorizontalParameter: React.FC<HorizontalParameterProps> = ({
             padding: 0,
             height: 12,
             '& .MuiSlider-thumb': {
-              width: 12,
-              height: 12,
-              transition: 'opacity 80ms',
+              width: 14,
+              height: 14,
+              borderRadius: '50%',
+              backgroundColor: '#f8fafc',
+              border: '2px solid #00d2ff',
+              boxShadow: '0 0 8px rgba(0, 210, 255, 0.5)',
+              transition: 'transform 0.1s ease, box-shadow 0.1s ease',
+              '&:hover, &.Mui-focusVisible': {
+                transform: 'scale(1.15)',
+                boxShadow: '0 0 12px rgba(0, 210, 255, 0.8)',
+              },
             },
-            '& .MuiSlider-track': { height: 3, border: 'none' },
-            '& .MuiSlider-rail': { height: 3, opacity: 0.5 },
+            '& .MuiSlider-track': {
+              height: 4,
+              borderRadius: 2,
+              border: 'none',
+              background: '#00d2ff',
+              boxShadow: '0 0 6px rgba(0, 210, 255, 0.45)',
+            },
+            '& .MuiSlider-rail': {
+              height: 4,
+              borderRadius: 2,
+              backgroundColor: '#0e121a',
+              border: '1px solid #222938',
+              opacity: 1,
+            },
           }}
         />
 
@@ -307,14 +327,22 @@ export const HorizontalParameter: React.FC<HorizontalParameterProps> = ({
           disableUnderline
           sx={{
             '& input': {
-              padding: '2px 3px',
+              padding: '2px 4px',
               fontSize: '10px',
               textAlign: 'right',
-              width: 26,
-              backgroundColor: '#252525',
-              border: '1px solid #404040',
-              borderRadius: 2,
+              width: 32,
+              backgroundColor: '#0b0e14',
+              border: '1px solid #222938',
+              borderRadius: 3,
+              color: '#f8fafc',
               fontFamily: '"Red Hat Mono", monospace',
+              transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+              '&:focus': {
+                borderColor: '#00d2ff',
+                backgroundColor: '#0e121a',
+                boxShadow: '0 0 6px rgba(0, 210, 255, 0.35)',
+                outline: 'none',
+              },
             },
           }}
         />

@@ -249,11 +249,11 @@ export function SpectrumEditor({ width, height, bands, sampleRate = 48000, eqDbM
     ctx.clearRect(0, 0, width, height);
 
     // 背景
-    ctx.fillStyle = '#15181b';
+    ctx.fillStyle = '#0b0e14';
     ctx.fillRect(0, 0, width, height);
 
     // EQ 軸の dB グリッド。±eqDbMax を 4 分割した位置にラインを引く（0 中央除く 8 本）。
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
     ctx.lineWidth = 1;
     ctx.beginPath();
     {
@@ -267,15 +267,15 @@ export function SpectrumEditor({ width, height, bands, sampleRate = 48000, eqDbM
     ctx.stroke();
 
     // 0 dB (EQ 中央) 強調
-    ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+    ctx.strokeStyle = 'rgba(0,210,255,0.25)';
     ctx.beginPath();
     ctx.moveTo(0, eqDbToY(0, height));
     ctx.lineTo(width, eqDbToY(0, height));
     ctx.stroke();
 
     // 周波数グリッド + ラベル
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.fillStyle = 'rgba(148,163,184,0.6)';
     ctx.font = '12px "Red Hat Mono", monospace';
     ctx.textBaseline = 'bottom';
     for (const hz of FREQ_GRID) {
@@ -300,7 +300,7 @@ export function SpectrumEditor({ width, height, bands, sampleRate = 48000, eqDbM
     // EQ dB ラベル（左端）。+eqDbMax / +eqDbMax/2 / 0 / -eqDbMax/2 の 4 ラベル。
     //  上端は textBaseline:top でキャンバス内に押し込み、それ以外は中央揃え。
     //  -eqDbMax は省略（下部に -半分が出ていれば読めるし、下端は freq ラベルと干渉するため）。
-    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.fillStyle = 'rgba(148,163,184,0.6)';
     ctx.textAlign = 'left';
     const fmtEqLabel = (db: number) => {
       const s = Number.isInteger(db) ? `${db}` : db.toFixed(1);
@@ -321,11 +321,11 @@ export function SpectrumEditor({ width, height, bands, sampleRate = 48000, eqDbM
     //  Pre / Post を同色・半透明で重ねる。overlap 領域（両方がカバー）は alpha 合成で自然に濃くなり、
     //  差分領域（片方のみ）は薄く残る。結果、EQ 前後の差が視覚的に読める。
     //  アウトラインは Post（最終出力）のみ描画して形を強調。
-    //  色はテーマ primary（#4fc3f7）を薄めたもの。fill は上→下で不透明度が上がる縦グラデーション。
+    //  色はテーマ primary（#00d2ff）を薄めたもの。fill は上→下で不透明度が上がる縦グラデーション。
     const specGrad = ctx.createLinearGradient(0, 0, 0, height);
-    specGrad.addColorStop(0, 'rgba(79,195,247,0.28)'); // 上端は濃いめ
-    specGrad.addColorStop(1, 'rgba(79,195,247,0.02)'); // 下端はほぼ透明
-    const SPEC_OUTLINE = 'rgba(79,195,247,0.45)';
+    specGrad.addColorStop(0, 'rgba(0,210,255,0.28)'); // 上端は濃いめ
+    specGrad.addColorStop(1, 'rgba(0,210,255,0.01)'); // 下端はほぼ透明
+    const SPEC_OUTLINE = 'rgba(0,210,255,0.65)';
 
     const drawSpectrumFill = (bins: number[]) => {
       ctx.beginPath();
@@ -448,8 +448,11 @@ export function SpectrumEditor({ width, height, bands, sampleRate = 48000, eqDbM
     // 合成 EQ カーブ（白線）
     //  可視域を下回る点は描画を打ち切り、底に張り付く線を残さない。
     const curveDb = fullCurveDb;
-    ctx.strokeStyle = 'rgba(255,255,255,0.92)';
-    ctx.lineWidth = 1.6;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0, 210, 255, 0.45)';
+    ctx.shadowBlur = 5;
+    ctx.strokeStyle = 'rgba(255,255,255,0.96)';
+    ctx.lineWidth = 1.8;
     ctx.beginPath();
     {
       let penDown = false;
@@ -462,6 +465,7 @@ export function SpectrumEditor({ width, height, bands, sampleRate = 48000, eqDbM
       }
     }
     ctx.stroke();
+    ctx.restore();
 
     // バンドノード
     //  OFF 時でも色を維持し、透明度だけ落とす（色でバンド識別しやすいように）。

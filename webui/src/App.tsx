@@ -325,36 +325,55 @@ function App() {
           }
         >
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 1, py: 0.5 }}>
-            <Typography
-              variant='body2'
-              component='div'
-              sx={{ flexGrow: 1, color: 'primary.main', fontWeight: 600, cursor: 'pointer' }}
-              onClick={() => setLicenseOpen(true)}
-              title='Licenses'
-            >
-              ZeroEQ
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography
+                variant='body2'
+                component='div'
+                sx={{
+                  color: 'primary.main',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  cursor: 'pointer',
+                  textShadow: '0 0 10px rgba(0, 210, 255, 0.4)',
+                }}
+                onClick={() => setLicenseOpen(true)}
+                title='Licenses'
+              >
+                SCULPT
+              </Typography>
+              <Typography
+                variant='caption'
+                sx={{
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  color: '#94a3b8',
+                  border: '1px solid #222938',
+                  borderRadius: '4px',
+                  px: 0.75,
+                  py: 0.1,
+                  backgroundColor: 'rgba(0, 210, 255, 0.05)',
+                }}
+              >
+                11-BAND PRECISION EQ
+              </Typography>
+            </Box>
             <Typography
               variant='caption'
-              color='text.secondary'
+              sx={{ color: 'text.secondary', cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
               onClick={() => setLicenseOpen(true)}
-              sx={{ cursor: 'pointer' }}
               title='Licenses'
             >
-              by Jun Murakami
+              by scobru
             </Typography>
           </Box>
 
           <Paper
-            elevation={2}
+            elevation={0}
             sx={{
               flex: 1,
               minHeight: 0,
               display: 'grid',
-              // 折りたたみ時は右列に OUT フェーダー + メーターを並べるため幅を拡張、
-              // 下部行は高さ 0 へ。
-              // gap は列方向だけ意味があるので常時 1 (8px)。スペアナと右列の間に視認できる
-              // 隙間を残しておくことで、折りたたみ時もフェーダーが張り付いて見えない。
               gridTemplateColumns: `1fr ${bottomPanelOpen ? RIGHT_COL_WIDTH : RIGHT_COL_WIDTH_COLLAPSED}px`,
               gridTemplateRows: `1fr ${bottomPanelOpen ? BAND_GRID_HEIGHT : 0}px`,
               gap: 1,
@@ -362,6 +381,9 @@ function App() {
               px: 2,
               pb: 1,
               mb: 1,
+              backgroundColor: '#12151f',
+              border: '1px solid #222938',
+              borderRadius: 2,
             }}
           >
           {/* 上左: スペアナ + エディタ */}
@@ -409,13 +431,24 @@ function App() {
                     fontSize: '11px',
                     lineHeight: 1,
                     minWidth: 0,
-                    color: 'rgba(255,255,255,0.4)',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    color: 'rgba(248,250,252,0.6)',
+                    border: '1px solid #222938',
+                    backgroundColor: 'rgba(11,14,20,0.6)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0,210,255,0.1)',
+                      borderColor: '#00d2ff',
+                      color: '#00d2ff',
+                    },
                   },
                   '& .MuiToggleButton-root.Mui-selected': {
-                    color: '#fff',
-                    backgroundColor: 'rgba(79,195,247,0.22)',
-                    borderColor: 'rgba(79,195,247,0.55)',
+                    color: '#090c12',
+                    fontWeight: 600,
+                    backgroundColor: '#00d2ff',
+                    borderColor: '#00d2ff',
+                    boxShadow: '0 0 10px rgba(0, 210, 255, 0.4)',
+                    '&:hover': {
+                      backgroundColor: '#00b4dc',
+                    },
                   },
                 }}
               >
@@ -446,12 +479,13 @@ function App() {
                   fontSize: '11px',
                   lineHeight: 1,
                   textTransform: 'none',
-                  color: 'rgba(255,255,255,0.4)',
-                  borderColor: 'rgba(255,255,255,0.12)',
+                  color: 'rgba(248,250,252,0.6)',
+                  borderColor: '#222938',
+                  backgroundColor: 'rgba(11,14,20,0.6)',
                   '&:hover': {
-                    color: 'rgba(255,255,255,0.85)',
-                    borderColor: 'rgba(255,255,255,0.35)',
-                    backgroundColor: 'rgba(255,255,255,0.04)',
+                    color: '#00d2ff',
+                    borderColor: '#00d2ff',
+                    backgroundColor: 'rgba(0, 210, 255, 0.1)',
                   },
                 }}
               >
@@ -467,13 +501,15 @@ function App() {
                   fontSize: '11px',
                   lineHeight: 1,
                   textTransform: 'none',
-                  color: spectrumOn ? '#fff' : 'rgba(255,255,255,0.4)',
-                  borderColor: spectrumOn ? 'rgba(79,195,247,0.55)' : 'rgba(255,255,255,0.12)',
-                  backgroundColor: spectrumOn ? 'rgba(79,195,247,0.22)' : 'transparent',
+                  color: spectrumOn ? '#090c12' : 'rgba(248,250,252,0.6)',
+                  fontWeight: spectrumOn ? 600 : 400,
+                  borderColor: spectrumOn ? '#00d2ff' : '#222938',
+                  backgroundColor: spectrumOn ? '#00d2ff' : 'rgba(11,14,20,0.6)',
+                  boxShadow: spectrumOn ? '0 0 10px rgba(0, 210, 255, 0.4)' : 'none',
                   '&:hover': {
-                    color: '#fff',
-                    borderColor: 'rgba(79,195,247,0.55)',
-                    backgroundColor: spectrumOn ? 'rgba(79,195,247,0.32)' : 'rgba(255,255,255,0.04)',
+                    color: spectrumOn ? '#090c12' : '#00d2ff',
+                    borderColor: '#00d2ff',
+                    backgroundColor: spectrumOn ? '#00b4dc' : 'rgba(0, 210, 255, 0.1)',
                   },
                 }}
               >
@@ -614,18 +650,17 @@ function App() {
                 gap: isCompact ? 0 : 1,
               }}
             >
-              <Divider orientation='vertical' flexItem sx={{ borderLeft: '1px solid rgba(255,255,255,0.22)', alignSelf: 'stretch' }} />
+              <Divider orientation='vertical' flexItem sx={{ borderLeft: '1px solid #222938', alignSelf: 'stretch' }} />
               {BANDS.map((b) => (
                 <Fragment key={b.index}>
                   <BandControlColumn def={b} compact={isCompact} />
-                  <Divider orientation='vertical' flexItem sx={{ borderLeft: '1px solid rgba(255,255,255,0.22)', alignSelf: 'stretch' }} />
+                  <Divider orientation='vertical' flexItem sx={{ borderLeft: '1px solid #222938', alignSelf: 'stretch' }} />
                 </Fragment>
               ))}
             </Box>
           </Box>)}
 
-          {/* 下右: OUT フェーダー（ZeroComp と同じ ParameterFader）。
-              折りたたみ時はメーター widget の左隣に移したのでこのセルは描画しない。 */}
+          {/* 下右: OUT フェーダー */}
           {bottomPanelOpen && (<Box
             sx={{
               gridColumn: '2 / 3',
@@ -656,8 +691,7 @@ function App() {
           </Box>)}
           </Paper>
 
-          {/* プラグイン (non-web) 時のみ右下コーナーに擬似リサイズハンドル。
-              WebView overlay として window_action を叩いて本体サイズを追従させる。ZeroComp と同じ。 */}
+          {/* プラグイン (non-web) 時のみ右下コーナーに擬似リサイズハンドル */}
           {!IS_WEB_MODE && <div
             id='resizeHandle'
             onPointerDown={onDragStart}
@@ -676,24 +710,15 @@ function App() {
           />}
         </Box>
 
-        {/* Web デモ時のみカード下部に説明文（ZeroComp と同じ流儀）。 */}
+        {/* Web デモ時のみカード下部に説明文 */}
         {IS_WEB_MODE && (
-          <>
-            <Typography
-              variant='caption'
-              color='text.secondary'
-              sx={{ mt: 1, textAlign: 'center', maxWidth: WEB_CARD_MAX_WIDTH, lineHeight: 1.8, px: 2 }}
-            >
-              ZeroEQ — zero-latency 11-band EQ with integrated spectrum analyzer.
-            </Typography>
-            <Typography
-              variant='caption'
-              color='text.secondary'
-              sx={{ textAlign: 'center', maxWidth: WEB_CARD_MAX_WIDTH, lineHeight: 1, px: 2 }}
-            >
-              ゼロレイテンシーのスペアナ内蔵 11 バンド EQ です。
-            </Typography>
-          </>
+          <Typography
+            variant='caption'
+            color='text.secondary'
+            sx={{ mt: 1, textAlign: 'center', maxWidth: WEB_CARD_MAX_WIDTH, lineHeight: 1.8, px: 2 }}
+          >
+            Sculpt — High-precision parametric equalizer with real-time spectrum analysis.
+          </Typography>
         )}
       </Box>
 

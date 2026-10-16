@@ -63,14 +63,14 @@ export const LevelMeterBar: React.FC<{
     const dpr = Math.max(1, window.devicePixelRatio || 1);
 
     ctx.clearRect(0, 0, cssW, cssH);
-    ctx.fillStyle = '#333';
+    ctx.fillStyle = '#0b0e14';
     ctx.fillRect(0, 0, cssW, cssH);
 
     const grad = ctx.createLinearGradient(0, cssH, 0, 0);
-    grad.addColorStop(0, '#4fc3f7');
-    grad.addColorStop(0.6, '#4fc3f7');
-    grad.addColorStop(0.8, '#ffeb3b');
-    grad.addColorStop(1, '#ff5252');
+    grad.addColorStop(0, '#00d2ff');
+    grad.addColorStop(0.65, '#00d2ff');
+    grad.addColorStop(0.85, '#ff9f1c');
+    grad.addColorStop(1, '#ef4444');
 
     const clamped = Math.max(MIN_DB, Math.min(0, level));
     const yTop = dbToY(clamped, cssH);
@@ -79,7 +79,7 @@ export const LevelMeterBar: React.FC<{
 
     // GR メーターと同じ目盛り値（0 と最下端を省いた中間値）を、
     //  左側のみ短い線で引く。
-    ctx.strokeStyle = '#666';
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
     ctx.lineWidth = 0.5;
     [-3, -6, -9, -12, -18, -24].forEach((db) => {
       const y = dbToY(db, cssH);
@@ -96,7 +96,7 @@ export const LevelMeterBar: React.FC<{
       ref={canvasRef}
       width={cssW}
       height={cssH}
-      style={{ borderRadius: 2, border: '1px solid #333', width: cssW, height: cssH }}
+      style={{ borderRadius: 2, border: '1px solid #222938', width: cssW, height: cssH }}
     />
   );
 
@@ -139,7 +139,7 @@ export const GainReductionMeterBar: React.FC<{ grDb: number; width?: number; hei
     const dpr = Math.max(1, window.devicePixelRatio || 1);
 
     ctx.clearRect(0, 0, cssW, cssH);
-    ctx.fillStyle = '#333';
+    ctx.fillStyle = '#0b0e14';
     ctx.fillRect(0, 0, cssW, cssH);
 
     const u = grToUnit(grDb);
@@ -147,8 +147,8 @@ export const GainReductionMeterBar: React.FC<{ grDb: number; width?: number; hei
     // GR バーは上から下へ伸びる（上端 = 0 dB GR、下端 = 最大 GR）。
     //  バーが長いほど = 圧縮量が大きいほど赤が自然なので、上端オレンジ → 下端赤の 2 ストップ リニア。
     const grad = ctx.createLinearGradient(0, 0, 0, cssH);
-    grad.addColorStop(0, '#ffab00'); // 上端（浅い圧縮側） = オレンジ
-    grad.addColorStop(1, '#ff5252'); // 下端（深い圧縮側） = 赤
+    grad.addColorStop(0, '#ff9f1c'); // 上端（浅い圧縮側） = オレンジ
+    grad.addColorStop(1, '#ef4444'); // 下端（深い圧縮側） = 赤
 
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, cssW, barHeight);
@@ -156,7 +156,7 @@ export const GainReductionMeterBar: React.FC<{ grDb: number; width?: number; hei
     // compact: Waveform モードの細い GR バー用。ラベル省略、左端から短いチックのみ。
     // 通常: 数値の両脇に水平線を引く。0 と -30 は省略。
     if (compact) {
-      ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
       ctx.lineWidth = 0.5;
       [3, 6, 9, 12, 18, 24].forEach((db) => {
         const y = grToUnit(db) * cssH;
@@ -168,7 +168,7 @@ export const GainReductionMeterBar: React.FC<{ grDb: number; width?: number; hei
       });
     } else {
       ctx.font = '9px sans-serif';
-      const tickColor = 'rgba(255,255,255,0.28)';
+      const tickColor = 'rgba(255,255,255,0.25)';
       ctx.fillStyle = tickColor;
       ctx.strokeStyle = tickColor;
       ctx.lineWidth = 1;
@@ -207,7 +207,7 @@ export const GainReductionMeterBar: React.FC<{ grDb: number; width?: number; hei
         ref={canvasRef}
         width={cssW}
         height={cssH}
-        style={{ borderRadius: 2, border: '1px solid #333', width: cssW, height: cssH }}
+        style={{ borderRadius: 2, border: '1px solid #222938', width: cssW, height: cssH }}
       />
     </Box>
   );
@@ -245,21 +245,21 @@ export const LoudnessMeterBar: React.FC<{ lkfs: number; width?: number; height?:
     const dpr = Math.max(1, window.devicePixelRatio || 1);
 
     ctx.clearRect(0, 0, cssW, cssH);
-    ctx.fillStyle = '#333';
+    ctx.fillStyle = '#0b0e14';
     ctx.fillRect(0, 0, cssW, cssH);
 
     const grad = ctx.createLinearGradient(0, cssH, 0, 0);
-    grad.addColorStop(0, '#4fc3f7');
-    grad.addColorStop(0.6, '#4fc3f7');
-    grad.addColorStop(0.8, '#ffeb3b');
-    grad.addColorStop(1, '#ff5252');
+    grad.addColorStop(0, '#00d2ff');
+    grad.addColorStop(0.65, '#00d2ff');
+    grad.addColorStop(0.85, '#ff9f1c');
+    grad.addColorStop(1, '#ef4444');
 
     const clamped = Math.max(LOUDNESS_MIN_LKFS, Math.min(0, lkfs));
     const yTop = lkfsToY(clamped, cssH);
     ctx.fillStyle = grad;
     ctx.fillRect(0, yTop, cssW, cssH - yTop);
 
-    ctx.strokeStyle = '#666';
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
     ctx.lineWidth = 0.5;
     [0, -6, -12, -18, -24, -30, -40, -50, -60].forEach((lk) => {
       const y = lkfsToY(lk, cssH);
@@ -283,7 +283,7 @@ export const LoudnessMeterBar: React.FC<{ lkfs: number; width?: number; height?:
         ref={canvasRef}
         width={cssW}
         height={cssH}
-        style={{ borderRadius: 2, border: '1px solid #333', width: cssW, height: cssH }}
+        style={{ borderRadius: 2, border: '1px solid #222938', width: cssW, height: cssH }}
       />
     </Box>
   );

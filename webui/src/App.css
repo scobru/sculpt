@@ -9,17 +9,17 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #606F77;
-  overflow: hidden; /* ウィンドウ全体のスクロールを禁止 */
-  overscroll-behavior-y: none; /* 慣性スクロールの端での引っ張り無効（対応ブラウザ） */
+  background-color: #090c12;
+  background-image: radial-gradient(circle at 50% 0%, #141721 0%, #090c12 80%);
+  overscroll-behavior-y: none;
   overscroll-behavior-x: none;
 }
 
 #root {
   width: 100%;
   height: 100vh;
-  --focus-border: #40c4ff;
-  background-color: #606F77;
+  --focus-border: #00d2ff;
+  background-color: transparent;
 }
 
 /* Webkit scrollbar styling for dark theme */
@@ -29,16 +29,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(64, 196, 255, 0.12);
+  background: #0e121a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(71, 161, 201, 0.45);
+  background: #242c3d;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(71, 161, 201, 0.75);
+  background: #00d2ff;
 }
 
 /* レイアウトシフト抑制: フォントロード中のフォールバック明示 */

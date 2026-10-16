@@ -1,26 +1,22 @@
-# ZeroEQ
+# Sculpt
 
-A **zero-latency**, spectrum-analyzer-integrated parametric equalizer for broadcast, streaming, live, and mastering work. 11 fixed-slot bands of minimum-phase IIR (2× HPF + Low Shelf + 6× Bell + High Shelf + LPF), with per-band drag, overlaid on a Pre / Post FFT analyzer. Built with JUCE + WebView (Vite / React 19 / MUI 7). Ships as **VST3 / AU / AAX / Standalone** on Windows / macOS and **VST3 / LV2 / CLAP / Standalone** on Linux, plus a WebAssembly browser demo that reuses the exact same DSP.
+A **zero-latency**, spectrum-analyzer-integrated 11-band precision parametric equalizer for broadcast, streaming, live, and mastering work. 11 fixed-slot bands of minimum-phase IIR (2× HPF + Low Shelf + 6× Bell + High Shelf + LPF), with per-band drag, overlaid on a Pre / Post FFT analyzer. Built with JUCE + WebView (Vite / React 19 / MUI). Ships as **VST3 / AU / AAX / CLAP / Standalone** on Windows & macOS.
 
-You can find the demo site running on WebAssembly here.
-https://zeroeq-demo.web.app/
-
-<img width="1003" height="706" alt="sc_zeroeq" src="https://github.com/user-attachments/assets/6c49c8a4-a18d-455d-aaf3-981998c5f7a5" />
+Maintained by **scobru**: [https://github.com/scobru/sculpt](https://github.com/scobru/sculpt)
 
 ## Highlights
 
 - **0-sample latency** — all bands are minimum-phase IIR biquads. No lookahead, no oversampling, no linear-phase FFT. Null-tests bit-identical with the input when every band is OFF (or Bypass is on).
 - **11 fixed-slot bands** — 2× High Pass (left) + Low Shelf + 6× Bell + High Shelf + Low Pass (right). Each band is colour-coded and draggable directly on the spectrum. No add/remove operations; the layout is always the same, which makes muscle memory transferable across sessions.
 - **High Pass / Low Pass with proper Butterworth Q** — slopes of 6 / 12 / 18 / 24 / 36 / 48 dB/oct. Each cascaded biquad stage is assigned the correct Butterworth Q (e.g. 24 dB/oct uses `Q = 0.5412, 1.3066`) so the default response is maximally flat at unity "resonance". The node's `Gain` control multiplies each stage's Q uniformly, acting as a continuous resonance dial.
-- **Integrated Pre / Post analyzer** — 4096-point Hann-windowed FFT, 256 log-frequency display bins (20 Hz..22 kHz). Pre (source) and Post (post-EQ) are both emitted and drawn as translucent fills with a Post outline. Analyzer can be toggled Off from the top-right button for zero-CPU headroom mode.
+- **Integrated Pre / Post analyzer** — 4096-point Hann-windowed FFT, 256 log-frequency display bins (20 Hz..22 kHz). Pre (source) and Post (post-EQ) are both emitted and drawn as translucent electric cyan fills with a Post outline. Analyzer can be toggled Off from the top-right button for zero-CPU headroom mode.
 - **Interactive node editor** — drag any node to change Freq + Gain (or "peak height" for HP/LP). Scroll-wheel over a node adjusts Q (for Bell/Shelf/Notch) or steps through slope values (for HP/LP). Ctrl/Cmd+click resets a single band. `Reset All` clears everything back to defaults.
 - **Variable vertical scale** — ±3 / ±6 / ±12 / ±24 / ±32 dB toggle in the top-left. The grid and node hit-testing follow the selected range instantly.
 - **Adaptive node tooltip** — hovering or dragging a node shows Freq / Gain / Q (or Slope) on a frosted-glass chip rendered in a Portal, so it always stays on top and never gets clipped by the canvas.
-- **60 Hz UI** — meters and spectrum refresh at 60 Hz (vsync-friendly). Smoothing coefficients are matched to the new rate so perceived attack/release feel identical to the previous 30 Hz build.
+- **60 Hz UI** — meters and spectrum refresh at 60 Hz (vsync-friendly).
 - **Output stage** — dedicated -24..+24 dB Output Gain fader on the right, independent from the band gains.
 - **I/O metering** — Peak / RMS / Momentary LKFS (ITU-R BS.1770-4) are all computed every block and broadcast together. Out meter is displayed with its own dB scale.
 - **Stereo-true** — identical coefficients and envelope state per band, applied channel-by-channel, so the stereo image is preserved end-to-end.
-- **WebAssembly demo** — the same C++ DSP (11-band EQ + Pre/Post FFT analyzer + meters) compiled to WASM and driven by an `AudioWorklet`. The React UI is reused verbatim via a Vite alias that swaps `juce-framework-frontend-mirror` for a web shim that forwards parameter changes to the worklet.
 
 ## Layout
 
@@ -42,9 +38,7 @@ The plugin window is resizable (minimum 875 × 450, default 875 × 450).
 | **Bell** | Surgical cuts, broad sweeps | RBJ peaking biquad. Q controls bandwidth. |
 | **High Shelf** | Air, top-end tilt | RBJ shelf biquad. |
 | **Low Pass** | De-essing, lo-fi | Slopes 6 / 12 / 18 / 24 / 36 / 48 dB/oct. Same Butterworth design as HP. |
-| **Notch** | Surgical kill (60 Hz hum, feedback) | Full extinction at fc. Selected via the per-band `BAND{i}_TYPE` parameter (not directly exposed by the fixed layout, but supported by the DSP). |
-
-Linear-phase / natural-phase / dynamic-EQ / mid-side modes are on the roadmap; current implementation is minimum-phase, full-stereo only.
+| **Notch** | Surgical kill (60 Hz hum, feedback) | Full extinction at fc. Selected via the per-band `BAND{i}_TYPE` parameter. |
 
 ## Requirements
 
@@ -52,29 +46,26 @@ Linear-phase / natural-phase / dynamic-EQ / mid-side modes are on the roadmap; c
 - C++17 toolchain
   - Windows: Visual Studio 2022 with the C++ workload
   - macOS: Xcode 14+
-  - Linux: gcc 13+ / clang + the apt packages listed under [Building on Linux](#building-on-linux)
+  - Linux: gcc 13+ / clang
 - Node.js 18+ and npm (for the WebUI)
 - JUCE (included as a submodule)
-- `clap-juce-extensions` (also a git submodule, used only for the Linux CLAP target)
-- Optional: AAX SDK for Pro Tools builds (drop at `aax-sdk/`)
-- Optional: Inno Setup 6 for the Windows installer
-- Optional: [Emscripten](https://emscripten.org) for the WebAssembly demo
+- `clap-juce-extensions` (git submodule for CLAP support)
 
 ## Getting started
 
 ```bash
 # 1. Clone with submodules
-git clone <this-repo>
-cd ZeroEQ
+git clone https://github.com/scobru/sculpt.git
+cd sculpt
 git submodule update --init --recursive
 
-# 2. WebUI dependencies
-cd webui && npm install && cd ..
+# 2. WebUI dependencies & build
+cd webui && npm install && npm run build && cd ..
 
 # 3. Build (Windows, Release distribution)
 powershell -ExecutionPolicy Bypass -File build_windows.ps1 -Configuration Release
-# → produces releases/<VERSION>/ZeroEQ_<VERSION>_Windows_VST3_AAX_Standalone.zip
-#   and (if Inno Setup 6 is installed) ZeroEQ_<VERSION>_Windows_Setup.exe
+# → produces releases/<VERSION>/Sculpt_<VERSION>_Windows_VST3_CLAP_Standalone.zip
+#   and (if Inno Setup 6 is installed) Sculpt_<VERSION>_Windows_Setup.exe
 
 # 4. Build (macOS)
 ./build_macos.zsh

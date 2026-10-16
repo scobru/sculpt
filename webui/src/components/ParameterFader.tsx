@@ -2,7 +2,7 @@
 // Copyright (C) 2026 Jun Murakami
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Input, Slider, Typography } from '@mui/material';
-import { darken, lighten, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { useJuceSliderValue } from '../hooks/useJuceParam';
 import { useFineAdjustPointer } from '../hooks/useFineAdjustPointer';
 import { useNumberInputAdjust } from '../hooks/useNumberInputAdjust';
@@ -34,67 +34,61 @@ interface ParameterFaderProps {
   disabled?: boolean;
 }
 
-const StyledSlider = styled(Slider)(({ theme }) => {
-  const primaryMain = theme.palette.primary.main;
-  const primaryLight = theme.palette.primary.light || lighten(primaryMain, 0.2);
-  const primaryDark = theme.palette.primary.dark || darken(primaryMain, 0.2);
-  const trackGradient = `linear-gradient(180deg, ${lighten(primaryLight, 0.15)} 0%, ${primaryMain} 50%, ${darken(
-    primaryDark,
-    0.15,
-  )} 100%)`;
-  const thumbTop = lighten(primaryMain, 0.9);
-  const thumbMid1 = lighten(primaryMain, 0.6);
-  const thumbMid2 = lighten(primaryMain, 0.2);
-  const thumbBottom = darken(primaryMain, 0.2);
-  const thumbGradient = `linear-gradient(180deg, ${thumbTop} 0%, ${thumbMid1} 40%, ${thumbMid2} 60%, ${thumbBottom} 100%)`;
+const StyledSlider = styled(Slider)(() => {
+  const trackGradient = 'linear-gradient(180deg, #67e8f9 0%, #00d2ff 60%, #0284c7 100%)';
 
   return {
     '& .MuiSlider-rail': {
       width: 8,
-      borderRadius: 2,
-      backgroundColor: '#1a1a1a',
-      border: '1px solid #404040',
+      borderRadius: 4,
+      backgroundColor: '#0e121a',
+      border: '1px solid #222938',
       opacity: 1,
+      boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.7)',
     },
     '& .MuiSlider-track': {
       width: 8,
-      borderRadius: 2,
+      borderRadius: 3,
       border: 'none',
       background: trackGradient,
+      boxShadow: '0 0 10px rgba(0, 210, 255, 0.45)',
     },
     '& .MuiSlider-thumb': {
-      width: 20,
+      width: 22,
       height: 28,
       borderRadius: 4,
-      background: thumbGradient,
-      border: '1px solid rgba(0,0,0,0.35)',
-      boxShadow: ['0 2px 4px rgba(0,0,0,0.45)', 'inset 0 1px 0 rgba(255,255,255,0.7)', 'inset 0 -2px 3px rgba(0,0,0,0.25)'].join(
-        ', ',
-      ),
+      background: 'linear-gradient(180deg, #2c3242 0%, #1e2430 50%, #121622 100%)',
+      border: '1px solid #3b4356',
+      boxShadow: '0 3px 8px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 2px rgba(0,0,0,0.5)',
       overflow: 'hidden',
       boxSizing: 'border-box',
+      transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+      '&:hover, &.Mui-focusVisible': {
+        borderColor: '#00d2ff',
+        boxShadow: '0 0 12px rgba(0, 210, 255, 0.5), inset 0 1px 0 rgba(255,255,255,0.3)',
+      },
       '&::before': {
         content: '""',
         position: 'absolute',
         left: 2,
         right: 2,
-        top: 4,
-        height: 9,
-        borderRadius: 3,
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.35) 60%, rgba(255,255,255,0) 100%)',
+        top: 2,
+        height: 8,
+        borderRadius: 2,
+        background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%)',
         pointerEvents: 'none',
       },
+      // Center indicator line glowing in Electric Neon Cyan
       '&::after': {
         content: '""',
         position: 'absolute',
-        left: '20%',
-        right: '20%',
-        top: '34%',
-        bottom: '30%',
-        borderRadius: 2,
-        background:
-          'repeating-linear-gradient(180deg, rgba(0,0,0,0.35) 0 1px, rgba(255,255,255,0.38) 1px 2px, rgba(0,0,0,0) 2px 6px)',
-        boxShadow: '0 0 0 1px rgba(0,0,0,0.08) inset',
+        left: '15%',
+        right: '15%',
+        top: '48%',
+        height: 2.5,
+        borderRadius: 1,
+        background: '#00d2ff',
+        boxShadow: '0 0 6px #00d2ff',
         pointerEvents: 'none',
       },
     },
@@ -103,18 +97,20 @@ const StyledSlider = styled(Slider)(({ theme }) => {
 
 const StyledInput = styled(Input)(() => ({
   '& input': {
-    padding: '2px 3px',
+    padding: '2px 4px',
     fontSize: '12px',
     fontFamily: '"Red Hat Mono", monospace',
     textAlign: 'center',
-    width: '38px',
-    backgroundColor: '#252525',
-    color: 'text.primary',
-    border: '1px solid #404040',
-    borderRadius: 2,
+    width: '42px',
+    backgroundColor: '#0b0e14',
+    color: '#f8fafc',
+    border: '1px solid #222938',
+    borderRadius: 4,
+    transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
     '&:focus': {
-      borderColor: '#4fc3f7',
-      backgroundColor: '#252525',
+      borderColor: '#00d2ff',
+      backgroundColor: '#0e121a',
+      boxShadow: '0 0 8px rgba(0, 210, 255, 0.35)',
       outline: 'none',
     },
   },

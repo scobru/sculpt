@@ -39,15 +39,15 @@ if(UNIX AND NOT APPLE)
 endif()
 
 # プラグイン定義（JUCE v8）
-juce_add_plugin(ZeroEQ
+juce_add_plugin(Sculpt
     VERSION ${PROJECT_VERSION}
-    PRODUCT_NAME "ZeroEQ"
-    COMPANY_NAME "Jun Murakami"
-    BUNDLE_ID "com.junmurakami.zeroeq"
-    PLUGIN_MANUFACTURER_CODE Jmbc
-    PLUGIN_CODE ZrEq
+    PRODUCT_NAME "Sculpt"
+    COMPANY_NAME "scobru"
+    BUNDLE_ID "com.scobru.sculpt"
+    PLUGIN_MANUFACTURER_CODE Scob
+    PLUGIN_CODE Sclp
     FORMATS ${ZEROEQ_FORMATS}
-    LV2URI "https://junmurakami.com/apps/zeroeq"
+    LV2URI "https://github.com/scobru/sculpt"
     PLUGIN_AU_MAIN_TYPE "aufx"
     VST3_CATEGORIES "Fx" "EQ"
     AAX_CATEGORY "AAX_ePlugInCategory_EQ"
@@ -64,15 +64,15 @@ juce_add_plugin(ZeroEQ
     NEEDS_WEBVIEW2 TRUE
 )
 
-juce_generate_juce_header(ZeroEQ)
+juce_generate_juce_header(Sculpt)
 
 # CLAP ターゲット生成（clap-juce-extensions 経由・Windows / macOS / Linux 全て）
-clap_juce_extensions_plugin(TARGET ZeroEQ
-    CLAP_ID "com.junmurakami.zeroeq"
+clap_juce_extensions_plugin(TARGET Sculpt
+    CLAP_ID "com.scobru.sculpt"
     CLAP_FEATURES audio-effect equalizer)
 
 # ソースファイル
-target_sources(ZeroEQ PRIVATE
+target_sources(Sculpt PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/PluginEditor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/PluginEditor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/PluginProcessor.cpp
@@ -103,15 +103,15 @@ configure_file(
     @ONLY
 )
 
-target_include_directories(ZeroEQ PRIVATE
+target_include_directories(Sculpt PRIVATE
     ${ZEROEQ_SRC_DIR}
     ${ZEROEQ_SRC_DIR}/dsp
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-target_include_directories(ZeroEQ SYSTEM PUBLIC ${JUCE_MODULES_DIR})
+target_include_directories(Sculpt SYSTEM PUBLIC ${JUCE_MODULES_DIR})
 
-target_link_libraries(ZeroEQ
+target_link_libraries(Sculpt
     PRIVATE
         juce::juce_audio_basics
         juce::juce_audio_devices
@@ -135,18 +135,18 @@ target_link_libraries(ZeroEQ
 #  JUCE はプラグインターゲットへ X11 を直接リンクしないため、自前で追加する。
 if(UNIX AND NOT APPLE)
     find_package(X11 REQUIRED)
-    target_link_libraries(ZeroEQ PRIVATE ${X11_LIBRARIES})
-    target_include_directories(ZeroEQ PRIVATE ${X11_INCLUDE_DIR})
+    target_link_libraries(Sculpt PRIVATE ${X11_LIBRARIES})
+    target_include_directories(Sculpt PRIVATE ${X11_INCLUDE_DIR})
 endif()
 
 # macOS: ヘッダパッド確保（署名/wraptool 対策）
 if(APPLE)
-    if (TARGET ZeroEQ)
-        target_link_options(ZeroEQ PRIVATE -Wl,-headerpad,578)
-        target_link_libraries(ZeroEQ PUBLIC "-framework ApplicationServices")
+    if (TARGET Sculpt)
+        target_link_options(Sculpt PRIVATE -Wl,-headerpad,578)
+        target_link_libraries(Sculpt PUBLIC "-framework ApplicationServices")
     endif()
 
-    foreach(wrapperTarget IN ITEMS ZeroEQ_VST3 ZeroEQ_AU ZeroEQ_Standalone ZeroEQ_AAX)
+    foreach(wrapperTarget IN ITEMS Sculpt_VST3 Sculpt_AU Sculpt_Standalone Sculpt_AAX)
         if (TARGET ${wrapperTarget})
             target_link_options(${wrapperTarget} PRIVATE -Wl,-headerpad,578)
             target_link_libraries(${wrapperTarget} PRIVATE "-framework ApplicationServices")
@@ -155,7 +155,7 @@ if(APPLE)
 endif()
 
 # 共通コンパイル定義（WebView 有効化）
-target_compile_definitions(ZeroEQ PUBLIC
+target_compile_definitions(Sculpt PUBLIC
     JUCE_WEB_BROWSER=1
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
@@ -163,8 +163,8 @@ target_compile_definitions(ZeroEQ PUBLIC
     $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:JUCE_DEBUG=1>
     $<$<PLATFORM_ID:Windows>:JUCE_USE_WIN_WEBVIEW2_WITH_STATIC_LINKING=1>
 
-    JucePlugin_ManufacturerCode=0x4a6d6263
-    JucePlugin_PluginCode=0x5a724571
+    JucePlugin_ManufacturerCode=0x53636f62
+    JucePlugin_PluginCode=0x53636c70
     JucePlugin_IsSynth=0
     JucePlugin_WantsMidiInput=0
     JucePlugin_ProducesMidiOutput=0
@@ -173,10 +173,12 @@ target_compile_definitions(ZeroEQ PUBLIC
 )
 
 # Dev/Prod の読み分け
-target_compile_definitions(ZeroEQ PRIVATE
+target_compile_definitions(Sculpt PRIVATE
     $<$<CONFIG:Debug>:ZEROEQ_DEV_MODE=1>
+    $<$<CONFIG:Debug>:SCULPT_DEV_MODE=1>
     $<$<CONFIG:Debug>:LOCAL_DEV_SERVER_ADDRESS="http://127.0.0.1:5173">
     $<$<NOT:$<CONFIG:Debug>>:ZEROEQ_DEV_MODE=0>
+    $<$<NOT:$<CONFIG:Debug>>:SCULPT_DEV_MODE=0>
 )
 
 # WebView 埋め込み用 ZIP の作成
@@ -212,7 +214,7 @@ add_custom_target(ZipWebViewFiles
 )
 
 cmake_path(GET PUBLIC_PATH FILENAME ZIPPED_FILES_PREFIX)
-target_compile_definitions(ZeroEQ PRIVATE
+target_compile_definitions(Sculpt PRIVATE
     $<$<NOT:$<CONFIG:Debug>>:ZIPPED_FILES_PREFIX="${ZIPPED_FILES_PREFIX}/">
 )
 
@@ -223,32 +225,32 @@ juce_add_binary_data(WebViewFiles
 )
 add_dependencies(WebViewFiles ZipWebViewFiles)
 
-target_link_libraries(ZeroEQ PRIVATE
+target_link_libraries(Sculpt PRIVATE
     $<$<NOT:$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:WebViewFiles>
 )
 
 # Windows 固有設定
 if(WIN32)
-    target_compile_definitions(ZeroEQ PRIVATE
+    target_compile_definitions(Sculpt PRIVATE
         NOMINMAX
         WIN32_LEAN_AND_MEAN
     )
-    target_compile_options(ZeroEQ PRIVATE
+    target_compile_options(Sculpt PRIVATE
         /utf-8
     )
-    target_link_libraries(ZeroEQ PRIVATE Dbghelp)
+    target_link_libraries(Sculpt PRIVATE Dbghelp)
 
-    # CLAP ラッパー(clap-juce-wrapper.cpp)は clap-juce-extensions 側で ZeroEQ_CLAP
-    # ターゲットとしてコンパイルされ、上の ZeroEQ への /utf-8 が届かない。DPI パッチが
+    # CLAP ラッパー(clap-juce-wrapper.cpp)は clap-juce-extensions 側で Sculpt_CLAP
+    # ターゲットとしてコンパイルされ、上の Sculpt への /utf-8 が届かない。DPI パッチが
     # UTF-8 の日本語コメントを追加しているため、MSVC が既定コードページ(CP932)で解釈すると
     # コメントが後続コードを飲み込み C2059/C3861 等で壊れる。CLAP にも /utf-8 を明示する。
-    if(TARGET ZeroEQ_CLAP)
-        target_compile_options(ZeroEQ_CLAP PRIVATE /utf-8)
+    if(TARGET Sculpt_CLAP)
+        target_compile_options(Sculpt_CLAP PRIVATE /utf-8)
     endif()
 endif()
 
 if(MSVC)
-    foreach(wrapperTarget IN ITEMS ZeroEQ ZeroEQ_VST3 ZeroEQ_Standalone ZeroEQ_AAX)
+    foreach(wrapperTarget IN ITEMS Sculpt Sculpt_VST3 Sculpt_Standalone Sculpt_AAX)
         if (TARGET ${wrapperTarget})
             target_compile_options(${wrapperTarget} PRIVATE
                 $<$<CONFIG:Debug>:/Zi>

@@ -1,4 +1,4 @@
-# ZeroEQ Windows Release Build Script
+# Sculpt Windows Release Build Script
 # PowerShell script for building production release with embedded WebUI
 
 param(
@@ -50,7 +50,7 @@ function Write-Error {
 }
 
 # Start build process
-Write-Header "ZeroEQ $Version Build Script"
+Write-Header "Sculpt $Version Build Script"
 
 # Load .env file if present (KEY=VALUE format, one per line)
 $EnvFilePath = "$RootDir\.env"
@@ -260,8 +260,8 @@ if ($LASTEXITCODE -ne 0) {
 
 # Build all plugin formats in a single cmake invocation so shared dependencies
 # (JUCE モジュール等) はまとめて 1 回だけコンパイルされ、各フォーマットは並列ビルドされる。
-$BuildTargets = @("ZeroEQ_VST3", "ZeroEQ_Standalone", "ZeroEQ_CLAP")
-if ($BuildAAX) { $BuildTargets += "ZeroEQ_AAX" }
+$BuildTargets = @("Sculpt_VST3", "Sculpt_Standalone", "Sculpt_CLAP")
+if ($BuildAAX) { $BuildTargets += "Sculpt_AAX" }
 
 Write-Step ("Building plugin formats: " + ($BuildTargets -join ', '))
 cmake --build . --config $Configuration --target $BuildTargets --parallel
@@ -276,8 +276,8 @@ Write-Header "Step 3: Packaging for distribution"
 
 # Copy VST3 files
 Write-Step "Copying VST3 files..."
-$SourceVST3 = "$BuildDir\plugin\ZeroEQ_artefacts\$Configuration\VST3\ZeroEQ.vst3"
-$DestVST3 = "$OutputDir\Windows\ZeroEQ.vst3"
+$SourceVST3 = "$BuildDir\plugin\Sculpt_artefacts\$Configuration\VST3\Sculpt.vst3"
+$DestVST3 = "$OutputDir\Windows\Sculpt.vst3"
 
 if (Test-Path $SourceVST3) {
     # 既存の VST3 バンドルがある場合は削除してからコピーする。
@@ -296,8 +296,8 @@ if (Test-Path $SourceVST3) {
 
 # Copy Standalone files
 Write-Step "Copying Standalone files..."
-$SourceStandalone = "$BuildDir\plugin\ZeroEQ_artefacts\$Configuration\Standalone\ZeroEQ.exe"
-$DestStandalone = "$OutputDir\Windows\ZeroEQ.exe"
+$SourceStandalone = "$BuildDir\plugin\Sculpt_artefacts\$Configuration\Standalone\Sculpt.exe"
+$DestStandalone = "$OutputDir\Windows\Sculpt.exe"
 
 if (Test-Path $SourceStandalone) {
     # 既存の EXE がある場合は削除してからコピーする（上書き時のロック/属性問題回避）。
@@ -314,8 +314,8 @@ if (Test-Path $SourceStandalone) {
 # Copy CLAP files
 # CLAP は単一ファイル（.clap = DLL に拡張子を付けたもの）。Authenticode 署名は Step 3.5 で実施。
 Write-Step "Copying CLAP files..."
-$SourceCLAP = "$BuildDir\plugin\ZeroEQ_artefacts\$Configuration\CLAP\ZeroEQ.clap"
-$DestCLAP = "$OutputDir\Windows\ZeroEQ.clap"
+$SourceCLAP = "$BuildDir\plugin\Sculpt_artefacts\$Configuration\CLAP\Sculpt.clap"
+$DestCLAP = "$OutputDir\Windows\Sculpt.clap"
 
 if (Test-Path $SourceCLAP) {
     if (Test-Path $DestCLAP) {
@@ -334,13 +334,13 @@ $AAXSigningStatus = "unsigned_developer"
 
 if ($BuildAAX) {
     Write-Step "Processing AAX plugin..."
-    $SourceAAX = "$BuildDir\plugin\ZeroEQ_artefacts\$Configuration\AAX\ZeroEQ.aaxplugin"
-    $DestAAX = "$OutputDir\Windows\ZeroEQ.aaxplugin"
+    $SourceAAX = "$BuildDir\plugin\Sculpt_artefacts\$Configuration\AAX\Sculpt.aaxplugin"
+    $DestAAX = "$OutputDir\Windows\Sculpt.aaxplugin"
     
     if (Test-Path $SourceAAX) {
         # 既存の AAX バンドルがある場合は削除してからコピーする。
         # これを行わないと、Copy-Item が入れ子の
-        # ZeroEQ.aaxplugin\ZeroEQ.aaxplugin\... を作ってしまう。
+        # Sculpt.aaxplugin\Sculpt.aaxplugin\... を作ってしまう。
         if (Test-Path $DestAAX) {
             Remove-Item -Path $DestAAX -Recurse -Force
         }
@@ -350,7 +350,7 @@ if ($BuildAAX) {
         Write-Success "AAX copied successfully (unsigned)"
 
         # AAX バンドルの中身が空でないかを検証（少なくとも本体バイナリが存在するか）
-        $AAXBinary = Join-Path $DestAAX "Contents\x64\ZeroEQ.aaxplugin"
+        $AAXBinary = Join-Path $DestAAX "Contents\x64\Sculpt.aaxplugin"
         if (-not (Test-Path $AAXBinary)) {
             Write-Host "Warning: AAX bundle binary not found at: $AAXBinary" -ForegroundColor Yellow
             Write-Host "Attempting to re-copy from build artefacts..." -ForegroundColor Yellow
@@ -470,7 +470,7 @@ Invoke-AuthenticodeSign -Paths @($Vst3InnerPE, $DestStandalone, $DestCLAP) | Out
 # Create README
 Write-Step "Creating documentation..."
 $ReadmeContent = @"
-ZeroEQ $Version - Windows Installation Guide
+Sculpt $Version - Windows Installation Guide
 ====================================================
 
 Important: Required Software
@@ -484,15 +484,15 @@ Installation Steps
 1. Close your DAW before proceeding.
 
 2. For VST3 Plugin:
-   Copy the entire ZeroEQ.vst3 folder to the following location:
+   Copy the entire Sculpt.vst3 folder to the following location:
    C:\Program Files\Common Files\VST3\
 
 3. For Standalone Application:
-   Copy ZeroEQ.exe to any preferred location, for example:
-   C:\Program Files\ZeroEQ\ or your Desktop.
+   Copy Sculpt.exe to any preferred location, for example:
+   C:\Program Files\Sculpt\ or your Desktop.
 
 4. For CLAP Plugin:
-   Copy ZeroEQ.clap to the following location:
+   Copy Sculpt.clap to the following location:
    C:\Program Files\Common Files\CLAP\
 
 "@
@@ -501,7 +501,7 @@ if ($BuildAAX) {
     $ReadmeContent += @"
 
 5. For AAX Plugin (Pro Tools):
-   Copy the entire ZeroEQ.aaxplugin folder to the following location:
+   Copy the entire Sculpt.aaxplugin folder to the following location:
    C:\Program Files\Common Files\Avid\Audio\Plug-Ins\
 
 "@
@@ -528,7 +528,7 @@ if ($BuildAAX) {
 }
 
 $VersionInfo = @{
-    name = "ZeroEQ"
+    name = "Sculpt"
     version = $Version
     build_date = $BuildDate
     platform = "Windows"
@@ -563,7 +563,7 @@ if (Test-Path $InnoSetupPath) {
         
         if ($LASTEXITCODE -eq 0) {
             Write-Success "Installer created successfully"
-            $InstallerPath = "$OutputDir\ZeroEQ_${Version}_Windows_Setup.exe"
+            $InstallerPath = "$OutputDir\Sculpt_${Version}_Windows_Setup.exe"
             Invoke-AuthenticodeSign -Paths @($InstallerPath) | Out-Null
             if (Test-Path $InstallerPath) {
                 $InstallerInfo = Get-Item $InstallerPath
@@ -584,9 +584,9 @@ if (Test-Path $InnoSetupPath) {
 # Create ZIP archive (as backup or alternative distribution)
 Write-Step "Creating ZIP archive..."
 if ($BuildAAX) {
-    $ZipName = "ZeroEQ_${Version}_Windows_VST3_AAX_CLAP_Standalone.zip"
+    $ZipName = "Sculpt_${Version}_Windows_VST3_AAX_CLAP_Standalone.zip"
 } else {
-    $ZipName = "ZeroEQ_${Version}_Windows_VST3_CLAP_Standalone.zip"
+    $ZipName = "Sculpt_${Version}_Windows_VST3_CLAP_Standalone.zip"
 }
 $ZipPath = "$OutputDir\$ZipName"
 
@@ -632,11 +632,11 @@ if ($BuildAAX) {
     }
 }
 Write-Host "The package includes:" -ForegroundColor Cyan
-Write-Host "[✓] ZeroEQ.vst3 (with embedded WebUI)" -ForegroundColor Green
-Write-Host "[✓] ZeroEQ.exe (Standalone application)" -ForegroundColor Green
-Write-Host "[✓] ZeroEQ.clap (CLAP plugin)" -ForegroundColor Green
+Write-Host "[✓] Sculpt.vst3 (with embedded WebUI)" -ForegroundColor Green
+Write-Host "[✓] Sculpt.exe (Standalone application)" -ForegroundColor Green
+Write-Host "[✓] Sculpt.clap (CLAP plugin)" -ForegroundColor Green
 if ($BuildAAX) {
-    Write-Host "[✓] ZeroEQ.aaxplugin ($AAXSigningStatusSummary)" -ForegroundColor Green
+    Write-Host "[✓] Sculpt.aaxplugin ($AAXSigningStatusSummary)" -ForegroundColor Green
 }
 Write-Host "[✓] Installation instructions" -ForegroundColor Green
 Write-Host "[✓] Version information" -ForegroundColor Green
@@ -648,7 +648,7 @@ if ($BuildAAX) {
 } else {
     Write-Host "[✓] VST3, Standalone, and CLAP compiled in $Configuration mode" -ForegroundColor Green
 }
-if (Test-Path "$OutputDir\ZeroEQ_${Version}_Windows_Setup.exe") {
+if (Test-Path "$OutputDir\Sculpt_${Version}_Windows_Setup.exe") {
     Write-Host "[✓] Installer created with Inno Setup" -ForegroundColor Green
 }
 Write-Host "[✓] Installation guide included" -ForegroundColor Green

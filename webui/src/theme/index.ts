@@ -10,21 +10,24 @@ export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#4fc3f7',
-      light: '#8bf6ff',
-      dark: '#0093c4',
+      main: '#00d2ff',
+      light: '#6ae7ff',
+      dark: '#0099cc',
     },
     secondary: {
-      main: '#ffab00',
+      main: '#ff9f1c',
+      light: '#ffb74d',
+      dark: '#f57c00',
     },
     background: {
-      default: '#606F77',
-      paper: '#252525',
+      default: '#090c12',
+      paper: '#12151f',
     },
     text: {
-      primary: '#e0e0e0',
-      secondary: '#a0a0a0',
+      primary: '#f8fafc',
+      secondary: '#94a3b8',
     },
+    divider: '#222938',
   },
   typography: {
     fontFamily: '"Jost",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',

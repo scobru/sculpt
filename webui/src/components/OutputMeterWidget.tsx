@@ -72,7 +72,7 @@ export function OutputMeterWidget({ height }: Props) {
 
     const dbToY = (db: number) => h - ((Math.max(MIN_DB, Math.min(0, db)) - MIN_DB) / (0 - MIN_DB)) * h;
     ctx.font = '10px "Red Hat Mono", monospace';
-    ctx.fillStyle = '#e0e0e0';
+    ctx.fillStyle = '#94a3b8';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     [0, -3, -6, -9, -12, -18, -24].forEach((db) => {

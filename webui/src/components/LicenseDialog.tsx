@@ -91,21 +91,22 @@ export const LicenseDialog: React.FC<LicenseDialogProps> = ({ open, onClose }) =
       <DialogContent sx={{ fontSize: '0.80rem', display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minHeight: 0, p: 2 }}>
         {/* 見出し（中央寄せ）、その下にバージョン/クレジット */}
         <Box sx={{ textAlign: 'center', py: 0.5 }}>
-          <Typography variant='h6' sx={{ fontWeight: 700, letterSpacing: 0.3, fontSize: '1.25rem' }}>
-            ZeroEQ
+          <Typography variant='h6' sx={{ fontWeight: 700, letterSpacing: 0.3, fontSize: '1.25rem', color: 'primary.main' }}>
+            SCULPT
           </Typography>
           <Typography variant='caption' color='text.secondary' sx={{ fontSize: '0.72rem' }}>
             v{DISPLAY_VERSION}
           </Typography>
           <Typography variant='body2' sx={{ mt: 0.5, fontSize: '0.80rem' }}>
-            Developed by{' '}
+            Maintained by{' '}
             <MuiLink
-              href='https://jun-murakami.web.app/'
-              onClick={(e) => handleLinkClick(e, 'https://jun-murakami.web.app/')}
-              sx={{ cursor: 'pointer' }}
+              href='https://github.com/scobru'
+              onClick={(e) => handleLinkClick(e, 'https://github.com/scobru')}
+              sx={{ cursor: 'pointer', color: 'primary.main' }}
             >
-              Jun Murakami
+              scobru
             </MuiLink>
+            {' '}(original by Jun Murakami)
           </Typography>
           <Typography variant='body2' color='text.secondary' sx={{ fontSize: '0.78rem' }}>
             Made with JUCE
@@ -121,9 +122,9 @@ export const LicenseDialog: React.FC<LicenseDialogProps> = ({ open, onClose }) =
             </MuiLink>
             {' — '}
             <MuiLink
-              href='https://github.com/Jun-Murakami/ZeroEQ'
-              onClick={(e) => handleLinkClick(e, 'https://github.com/Jun-Murakami/ZeroEQ')}
-              sx={{ cursor: 'pointer' }}
+              href='https://github.com/scobru/sculpt'
+              onClick={(e) => handleLinkClick(e, 'https://github.com/scobru/sculpt')}
+              sx={{ cursor: 'pointer', color: 'primary.main' }}
             >
               Source on GitHub
             </MuiLink>

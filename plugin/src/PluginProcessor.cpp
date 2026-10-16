@@ -63,7 +63,7 @@ ZeroEQAudioProcessor::ZeroEQAudioProcessor()
     : AudioProcessor(BusesProperties()
                          .withInput ("Input",  juce::AudioChannelSet::stereo(), true)
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
-      parameters(*this, nullptr, juce::Identifier("ZeroEQ"), createParameterLayout())
+      parameters(*this, nullptr, juce::Identifier("Sculpt"), createParameterLayout())
 {
     // WebView 起動診断ログ + Linux 描画/起動緩和策（エディタ生成より前に実行）
     wvdiag::DiagnosticLog::install(ZEROEQ_PRODUCT_NAME, ZEROEQ_VERSION_STRING);
@@ -294,7 +294,7 @@ void ZeroEQAudioProcessor::setStateInformation(const void* data, int sizeInBytes
 {
     if (auto xml = getXmlFromBinary(data, sizeInBytes))
     {
-        if (xml->hasTagName(parameters.state.getType()))
+        if (xml->hasTagName(parameters.state.getType()) || xml->hasTagName("ZeroEQ"))
             parameters.replaceState(juce::ValueTree::fromXml(*xml));
     }
 }

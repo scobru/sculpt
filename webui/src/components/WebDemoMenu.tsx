@@ -34,7 +34,7 @@ export const MENU_WIDE_QUERY    = '(min-width:1200px)';
 export const MENU_DRAWER_WIDTH  = 280;
 
 const MENU_SECTIONS: ReadonlyArray<MenuSection> = menuSectionsJson;
-const SOURCE_URL = 'https://github.com/Jun-Murakami/ZeroEQ';
+const SOURCE_URL = 'https://github.com/scobru/sculpt';
 
 export const WebDemoMenu: React.FC = () => {
   const wide = useMediaQuery(MENU_WIDE_QUERY);
