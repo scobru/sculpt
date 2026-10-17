@@ -91,7 +91,7 @@ target_sources(Sculpt PRIVATE
 )
 
 if(APPLE)
-    target_sources(ZeroEQ PRIVATE
+    target_sources(Sculpt PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/KeyEventForwarder_mac.mm
     )
 endif()
