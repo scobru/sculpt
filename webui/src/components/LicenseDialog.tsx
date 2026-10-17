@@ -106,7 +106,23 @@ export const LicenseDialog: React.FC<LicenseDialogProps> = ({ open, onClose }) =
             >
               scobru
             </MuiLink>
-            {' '}(original by Jun Murakami)
+            {' — '}
+            Fork of{' '}
+            <MuiLink
+              href='https://github.com/Jun-Murakami/ZeroEQ'
+              onClick={(e) => handleLinkClick(e, 'https://github.com/Jun-Murakami/ZeroEQ')}
+              sx={{ cursor: 'pointer', color: 'primary.main' }}
+            >
+              ZeroEQ
+            </MuiLink>
+            {' by '}
+            <MuiLink
+              href='https://github.com/Jun-Murakami'
+              onClick={(e) => handleLinkClick(e, 'https://github.com/Jun-Murakami')}
+              sx={{ cursor: 'pointer', color: 'primary.main' }}
+            >
+              Jun Murakami
+            </MuiLink>
           </Typography>
           <Typography variant='body2' color='text.secondary' sx={{ fontSize: '0.78rem' }}>
             Made with JUCE

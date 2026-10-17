@@ -2,6 +2,8 @@
 
 A **zero-latency**, spectrum-analyzer-integrated 11-band precision parametric equalizer for broadcast, streaming, live, and mastering work. 11 fixed-slot bands of minimum-phase IIR (2× HPF + Low Shelf + 6× Bell + High Shelf + LPF), with per-band drag, overlaid on a Pre / Post FFT analyzer. Built with JUCE + WebView (Vite / React 19 / MUI). Ships as **VST3 / AU / AAX / CLAP / Standalone** on Windows & macOS.
 
+> **Note**: This project is a fork of [ZeroEQ](https://github.com/Jun-Murakami/ZeroEQ) by [Jun Murakami](https://github.com/Jun-Murakami).
+
 Maintained by **scobru**: [https://github.com/scobru/sculpt](https://github.com/scobru/sculpt)
 
 ## Highlights
@@ -296,4 +298,4 @@ It uses [JUCE](https://juce.com/) under the AGPLv3 option of its dual-licensing 
 
 ## Credits
 
-Developed by **Jun Murakami**. Built on **JUCE** with an embedded **WebView2 / WKWebView** frontend, and a WebAssembly build of the same DSP for the browser demo.
+Originally developed by [Jun Murakami](https://github.com/Jun-Murakami) as [ZeroEQ](https://github.com/Jun-Murakami/ZeroEQ). Rebranded, customized, and maintained by **scobru**. Built on **JUCE** with an embedded **WebView2 / WKWebView** frontend, and a WebAssembly build of the same DSP for the browser demo.
