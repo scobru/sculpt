@@ -80,6 +80,10 @@ jobs:
           cd ../../../../artifacts
           cp ../README.md macOS/ || true
           cp ../LICENSE macOS/ || true
+          if [ -f "../install.command" ]; then
+            cp ../install.command macOS/
+            chmod +x macOS/install.command
+          fi
           zip -r -y Sculpt-macOS-Universal.zip macOS/
 
       - name: Upload macOS Artifact
@@ -157,7 +161,8 @@ jobs:
             Copy-Item -Recurse "build\plugin\Sculpt_artefacts\Release\AAX\Sculpt.aaxplugin" "artifacts\Windows\"
           }
           
-          # Documentation
+          # Scripts & Documentation
+          if (Test-Path "install.bat") { Copy-Item "install.bat" "artifacts\Windows\" }
           if (Test-Path "README.md") { Copy-Item "README.md" "artifacts\Windows\" }
           if (Test-Path "LICENSE") { Copy-Item "LICENSE" "artifacts\Windows\" }
           
