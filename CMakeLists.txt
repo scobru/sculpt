@@ -37,7 +37,11 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ApplyClapPatch.cmake)
 add_subdirectory(clap-juce-extensions EXCLUDE_FROM_ALL)
 
 # AAX SDK の設定（存在する場合のみ有効）
-set(AAX_SDK_PATH "${CMAKE_SOURCE_DIR}/aax-sdk" CACHE PATH "Path to AAX SDK")
+if(DEFINED ENV{JUCE_AAX_SDK_PATH} AND NOT DEFINED AAX_SDK_PATH)
+    set(AAX_SDK_PATH "$ENV{JUCE_AAX_SDK_PATH}" CACHE PATH "Path to AAX SDK")
+else()
+    set(AAX_SDK_PATH "${CMAKE_SOURCE_DIR}/aax-sdk" CACHE PATH "Path to AAX SDK")
+endif()
 if(EXISTS "${AAX_SDK_PATH}/Interfaces/AAX.h")
     message(STATUS "AAX SDK found at: ${AAX_SDK_PATH}")
     juce_set_aax_sdk_path("${AAX_SDK_PATH}")

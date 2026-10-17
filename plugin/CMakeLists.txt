@@ -32,8 +32,11 @@ if(APPLE)
     set_property(GLOBAL PROPERTY JUCE_AAX_COPY_DIR "${CMAKE_BINARY_DIR}/AAX_Plugins")
 endif()
 
-# Linux ビルド時のみ LV2 を FORMATS に追加（既存の Windows/macOS リリース経路には影響させない）
-set(ZEROEQ_FORMATS AU VST3 Standalone AAX)
+# プラグインフォーマット設定（AAX は SDK が存在する場合のみ追加）
+set(ZEROEQ_FORMATS AU VST3 Standalone)
+if(BUILD_AAX)
+    list(APPEND ZEROEQ_FORMATS AAX)
+endif()
 if(UNIX AND NOT APPLE)
     list(APPEND ZEROEQ_FORMATS LV2)
 endif()

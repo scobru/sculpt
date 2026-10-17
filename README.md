@@ -76,6 +76,18 @@ powershell -ExecutionPolicy Bypass -File build_windows.ps1 -Configuration Releas
 bash build_linux.sh
 ```
 
+### Pro Tools (AAX) Support
+
+Sculpt includes native support for Avid Pro Tools via the **AAX** format:
+1. **Compiling AAX**:
+   - Place the Avid AAX SDK in `aax-sdk/` or set the `JUCE_AAX_SDK_PATH` environment variable.
+   - CMake automatically enables the `Sculpt_AAX` target with `AAX_ePlugInCategory_EQ`.
+   - On macOS, builds `Sculpt.aaxplugin` (dest: `/Library/Application Support/Avid/Audio/Plug-Ins/`).
+   - On Windows, builds `Sculpt.aaxplugin` (dest: `C:\Program Files\Common Files\Avid\Audio\Plug-Ins\`).
+   - *Commercial Pro Tools*: Retail Pro Tools requires AAX binaries to be digitally signed using PACE Eden (`wraptool` with Avid developer certificate). For Pro Tools Developer Edition, unsigned binaries work out of the box.
+2. **Instant Pro Tools use via VST3 Wrapper**:
+   - To use Sculpt immediately in any retail Pro Tools version without needing PACE signing, load `Sculpt.vst3` through an AAX wrapper such as **Blue Cat's PatchWork** or **DDMF Metaplugin**.
+
 ### Building on Linux
 
 Tested on **WSL2 Ubuntu 24.04**, but should work on any modern glibc-based distro with `webkit2gtk-4.1` available.
