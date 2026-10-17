@@ -51,7 +51,7 @@ endif()
 # reverse-check で適用済みなら skip、未適用なら forward。forward 失敗で _ok_var=FALSE。
 function(_clap_apply _ok_var)
     execute_process(
-        COMMAND "${GIT_EXECUTABLE}" apply --directory=${CJE_DIR_NAME} -p1 --reverse --check "${CJE_PATCH_LOCAL}"
+        COMMAND "${GIT_EXECUTABLE}" apply --directory=${CJE_DIR_NAME} -p1 --ignore-space-change --reverse --check "${CJE_PATCH_LOCAL}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         RESULT_VARIABLE _rev ERROR_QUIET OUTPUT_QUIET)
     if(_rev EQUAL 0)
@@ -60,7 +60,7 @@ function(_clap_apply _ok_var)
         return()
     endif()
     execute_process(
-        COMMAND "${GIT_EXECUTABLE}" apply --directory=${CJE_DIR_NAME} -p1 "${CJE_PATCH_LOCAL}"
+        COMMAND "${GIT_EXECUTABLE}" apply --directory=${CJE_DIR_NAME} -p1 --ignore-space-change "${CJE_PATCH_LOCAL}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         RESULT_VARIABLE _app ERROR_VARIABLE _err)
     if(_app EQUAL 0)

@@ -81,14 +81,14 @@ function(_juce_apply_all _ok_var)
     foreach(_patch IN LISTS JUCE_PATCH_NAMES)
         set(_local "${CMAKE_CURRENT_SOURCE_DIR}/patches/${_patch}")
         execute_process(
-            COMMAND "${GIT_EXECUTABLE}" apply --directory=${JUCE_DIR_NAME} -p1 --reverse --check "${_local}"
+            COMMAND "${GIT_EXECUTABLE}" apply --directory=${JUCE_DIR_NAME} -p1 --ignore-space-change --reverse --check "${_local}"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             RESULT_VARIABLE _rev ERROR_QUIET OUTPUT_QUIET)
         if(_rev EQUAL 0)
             message(STATUS "juce patch: already applied ${_patch}")
         else()
             execute_process(
-                COMMAND "${GIT_EXECUTABLE}" apply --directory=${JUCE_DIR_NAME} -p1 "${_local}"
+                COMMAND "${GIT_EXECUTABLE}" apply --directory=${JUCE_DIR_NAME} -p1 --ignore-space-change "${_local}"
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                 RESULT_VARIABLE _app ERROR_VARIABLE _err)
             if(_app EQUAL 0)

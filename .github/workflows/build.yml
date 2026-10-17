@@ -96,6 +96,15 @@ jobs:
           npm run build
           cd ..
 
+      - name: Install WebView2 NuGet Package
+        shell: pwsh
+        run: |
+          $targetDir = "$env:USERPROFILE\AppData\Local\PackageManagement\NuGet\Packages\Microsoft.Web.WebView2.1.0.3485.44"
+          New-Item -ItemType Directory -Force -Path $targetDir | Out-Null
+          $zip = "$env:TEMP\webview2.zip"
+          curl.exe -L -o $zip "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.3485.44"
+          tar -xf $zip -C $targetDir
+
       - name: Configure CMake
         run: |
           cmake -B build -A x64
